@@ -24,6 +24,7 @@ import hudson.model.Descriptor;
 import hudson.util.FormValidation;
 import javax.annotation.Nonnull;
 import jenkins.plugins.office365connector.model.Macro;
+import jenkins.plugins.office365connector.model.CustomMessage;
 import jenkins.plugins.office365connector.utils.FormUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
@@ -48,6 +49,8 @@ public class Webhook extends AbstractDescribableImpl<Webhook> {
     private int timeout;
 
     private List<Macro> macros = Collections.emptyList();
+
+    private List<CustomMessage> customMessages = Collections.emptyList();
 
     @DataBoundConstructor
     public Webhook(String url) {
@@ -156,6 +159,15 @@ public class Webhook extends AbstractDescribableImpl<Webhook> {
     @DataBoundSetter
     public void setMacros(List<Macro> macros) {
         this.macros = Util.fixNull(macros);
+    }
+
+    public List<CustomMessage> getCustomMessages() {
+        return Util.fixNull(customMessages);
+    }
+
+    @DataBoundSetter
+    public void setCustomMessages(List<CustomMessage> customMessages) {
+        this.customMessages = Util.fixNull(customMessages);
     }
 
     @Extension

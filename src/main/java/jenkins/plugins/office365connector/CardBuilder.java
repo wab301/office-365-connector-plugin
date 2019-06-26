@@ -13,9 +13,14 @@
  */
 package jenkins.plugins.office365connector;
 
+import java.util.Collections;
+import java.util.List;
+
+import hudson.Util;
 import hudson.model.Result;
 import hudson.model.Run;
 import jenkins.plugins.office365connector.model.Card;
+import jenkins.plugins.office365connector.model.Fact;
 import jenkins.plugins.office365connector.model.Section;
 import jenkins.plugins.office365connector.workflow.StepParameters;
 
@@ -37,10 +42,21 @@ public class CardBuilder {
     }
 
     public Card createStartedCard() {
+        return createStartedCard(Collections.emptyList());
+    }
+
+    public Card createStartedCard(List<Fact> factsList) {
         factsBuilder.addStatusStarted();
         factsBuilder.addRemarks();
         factsBuilder.addCulprits();
         factsBuilder.addDevelopers();
+
+        if (!Util.fixNull(factsList).isEmpty()) {
+            for (Fact fact : factsList) {
+                factsBuilder.addFact(fact.getName(), fact.getValue());
+            }
+        }
+
 
         String jobName = getDisplayName();
         // TODO: dot in the message with single sentence should be removed
@@ -56,6 +72,10 @@ public class CardBuilder {
     }
 
     public Card createCompletedCard() {
+        return createCompletedCard(Collections.emptyList());
+    }
+
+    public Card createCompletedCard(List<Fact> factsList) {
         String jobName = getDisplayName();
         // result might be null only for ongoing job - check documentation of Result.getCompletedResult()
         Result lastResult = getCompletedResult(run);
@@ -79,6 +99,12 @@ public class CardBuilder {
         factsBuilder.addRemarks();
         factsBuilder.addCulprits();
         factsBuilder.addDevelopers();
+
+        if (!Util.fixNull(factsList).isEmpty()) {
+            for (Fact fact : factsList) {
+                factsBuilder.addFact(fact.getName(), fact.getValue());
+            }
+        }
 
         String activityTitle = "Update from " + jobName + ".";
         String activitySubtitle = "Latest status of build " + getRunName();

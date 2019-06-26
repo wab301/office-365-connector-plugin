@@ -126,6 +126,7 @@ public class DecisionMaker {
         return result == Result.UNSTABLE
                 && webhook.isNotifyUnstable();
     }
+    
 
     private String evaluateMacro(String template) {
         try {
